@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:money_doctor/bills_list_example.dart';
 import 'package:money_doctor/incomes_list_example.dart';
 
@@ -16,14 +14,26 @@ class MoneyDoctor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "MONEY DOCTOR",
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: BillsPage(),
+        body: Container(
+          decoration: BoxDecoration(
+          image: DecorationImage(
+              image: const AssetImage("images/background.png"),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.1), // Adjust opacity as needed (0.0 - fully transparent, 1.0 - fully opaque)
+              BlendMode.dstATop,
+            ),
+            ),
+          ),
+          child: const SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: BillsPage(),
+            ),
           ),
         ),
       ),
