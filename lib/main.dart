@@ -1,6 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:money_doctor/bills_list_example.dart';
+import 'package:money_doctor/incomes_list_example.dart';
 
+BillsListExample billsListExample = BillsListExample();
+IncomesListExample incomesListExample = IncomesListExample();
 
 void main() {
   runApp(const MoneyDoctor());
@@ -36,25 +41,18 @@ class BillsPage extends StatefulWidget {
 
 class _BillsPageState extends State<BillsPage> {
 
-  List<Icon> test = [
-    Icon(Icons.remove),
-    Icon(Icons.remove),
-    Icon(Icons.remove),
-    Icon(Icons.remove),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        Center(
+        const Center(
           child: Image(
-              image: AssetImage(
-                  "images/logo.png"
-              ),
+            image: AssetImage(
+                "images/logo.png"
+            ),
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(top:30),
           child: Row(
             children: [
@@ -63,7 +61,7 @@ class _BillsPageState extends State<BillsPage> {
               TextButton(
                   onPressed: null,
                   child: Icon(
-                    Icons.add
+                      Icons.add
                   )
               ),
               SizedBox(width:47),
@@ -77,40 +75,54 @@ class _BillsPageState extends State<BillsPage> {
             ],
           ),
         ),
-        Row(
-            children: [
-              Icon(
-                  Icons.money_off,
-                  color: Colors.red,
-                  size: 50,
+        const Row(
+          children: [
+            Icon(
+              Icons.money_off,
+              color: Colors.red,
+              size: 50,
+            ),
+            Text(
+              "YOUR BILLS",
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black45
               ),
-              Text(
-                  "YOUR BILLS",
-                  style: TextStyle(
+            ),
+            SizedBox(width:40),
+            Icon(
+              Icons.monetization_on_sharp,
+              color: Colors.greenAccent,
+              size: 50,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+              child: Text(
+                "INCOMES",
+                style: TextStyle(
                     fontSize: 20,
                     color: Colors.black45
-                  ),
-              ),
-              SizedBox(width:40),
-              Icon(
-                Icons.monetization_on_sharp,
-                color: Colors.greenAccent,
-                size: 50,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                child: Text(
-                  "INCOMES",
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black45
-                  ),
                 ),
-              )
-            ],
-          ),
-
-
+              ),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            const SizedBox(width: 48,),
+            Expanded(
+              child: Column(
+                children: billsListExample.billsRows,
+              ),
+            ),
+            const SizedBox(width: 88,),
+            Expanded(
+              child: Column(
+                children: incomesListExample.incomesRows,
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
