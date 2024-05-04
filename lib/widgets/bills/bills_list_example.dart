@@ -3,8 +3,8 @@ import 'package:money_doctor/widgets/bills/bill.dart';
 
 class BillsListExample {
   List<Bill> billsList = [
-    Bill(25.00),
-    Bill(25.00),
+    Bill(125.00),
+    Bill(2225.00),
     Bill(325.00),
     Bill(125.00),
     Bill(25.00),

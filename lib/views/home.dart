@@ -130,11 +130,29 @@ class Home extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20,),
-                    const Center(child: Text("Saldo:", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black45),)),
+                    const Center(child: Text("Balance:", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black45),)),
 
                     const SizedBox(height: 2,),
 
-                    Center(child: Text("$totalDifference €", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),))
+
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        backgroundColor: totalDifference < 0 ? Colors.red : Colors.greenAccent,
+                        side: BorderSide(
+                            width: 2,
+                            color:  totalDifference < 0 ? Colors.red : Colors.green,
+                        ),
+                      ),
+                      onPressed: () { },
+                      child: Text('$totalDifference €',
+                      style: TextStyle(
+                          fontSize: 28, fontWeight: FontWeight.bold, color: totalDifference < 0 ? Colors.white : Colors.green,
+                      ),),
+                    )
+
                   ],
                 )),
           ),
