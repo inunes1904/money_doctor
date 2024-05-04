@@ -1,5 +1,5 @@
-# money_doctor
-
+<img src="images/logo.png" width="500" >
+# Money Doctor
 A new Flutter project.
 
 Link Trello: https://trello.com/b/I5JRCY5G/money-doctor
