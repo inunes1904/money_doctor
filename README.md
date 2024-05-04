@@ -15,4 +15,3 @@ The history of financial management applications dates back to the early 21st ce
 
 ### App Example
 
-![example.png](images/example.png)
