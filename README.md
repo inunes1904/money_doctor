@@ -6,7 +6,7 @@ Link Trello: https://trello.com/b/I5JRCY5G/money-doctor
 
 Link Planner: https://tasks.office.com/uabpt.onmicrosoft.com/pt-PT/Home/Planner/#/plantaskboard?groupId=1f221545-d4fe-4617-b1a4-8e2b2b707b36&planId=Py_mYcfOFUOOoUzegRjEMZYAEfXG
 
-## Getting Started
+## Motivation
 
 
 In today's rapidly accelerating world, where financial transactions occur with the tap of a screen, effective financial management has become more critical than ever. The advent of digital technologies has significantly transformed the landscape of personal finance, leading to the emergence of financial management applications that serve as indispensable tools for individuals and businesses alike. These applications, often referred to as personal finance apps, are software solutions designed to assist users in efficiently managing their finances. They offer a wide range of functionalities, including budget tracking, expense management, bill payment reminders, investment tracking, and goal setting. By providing real-time information about their financial activities, these apps empower users to make informed decisions and take control of their financial well-being.
