@@ -1,6 +1,17 @@
-<img src="images/logo.png" width="1000" >
+<img src="images/logo.png" width="900" >
 
-Flutter projec
+Universidade Aberta 
+Master's in Computer Engineering and Web Technology
+
+Lecturers:
+Doctor Professor Paulo Pombinho
+Doctor Professor José Fonseca
+
+Students:
+André Costa (Nº 2302571)
+Ivo Nunes (Nº 2302582)
+André Pereira (Nº 2302569) 
+André Pedrosa (Nº 2302570) 
 
 Link Trello: https://trello.com/b/I5JRCY5G/money-doctor
 
