@@ -9,9 +9,9 @@ Doctor Professor José Fonseca
 
 Students:
 André Costa (Nº 2302571)
-Ivo Nunes (Nº 2302582)
 André Pereira (Nº 2302569) 
 André Pedrosa (Nº 2302570) 
+Ivo Nunes (Nº 2302582)
 
 Link Trello: https://trello.com/b/I5JRCY5G/money-doctor
 
