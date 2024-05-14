@@ -1,73 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:money_doctor/views/login.dart';
+import 'package:flutter_config/flutter_config.dart';
+import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:io';
+import 'routes/app_pages.dart';
+import 'styles/theme.dart';
+import 'utils/dependency.injection.dart';
+import 'views/splash/splash.page.dart';
 
-var kColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 66, 103, 178),
-);
-var kDarkColorScheme = ColorScheme.fromSeed(
-  brightness: Brightness.dark,
-  seedColor: const Color.fromARGB(255, 5, 99, 125),
-);
-
-void main() {
-
-  runApp(
-    MaterialApp(
-      darkTheme: ThemeData.dark().copyWith(
-        // useMaterial3: true,
-        colorScheme: kDarkColorScheme,
-        cardTheme: const CardTheme().copyWith(
-          color: kDarkColorScheme.secondaryContainer,
-          margin: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kDarkColorScheme.primaryContainer,
-            foregroundColor: kDarkColorScheme.onPrimaryContainer,
-            elevation: 4,
-          ),
-        ),
-      ),
-      theme: ThemeData().copyWith(
-        colorScheme: kColorScheme,
-        appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: kColorScheme.onPrimaryContainer,
-          foregroundColor: kColorScheme.primaryContainer,
-        ),
-        cardTheme: const CardTheme().copyWith(
-          color: kColorScheme.secondaryContainer,
-          margin: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kColorScheme.primaryContainer,
-            elevation: 4,
-          ),
-        ),
-        textTheme: ThemeData().textTheme.copyWith(
-              titleLarge: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: kColorScheme.onSecondaryContainer,
-                  fontSize: 22),
-              titleMedium: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: kColorScheme.onSecondaryContainer,
-                  fontSize: 14),
-              titleSmall: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: kColorScheme.onSecondaryContainer,
-                  fontSize: 8),
-            ),
-      ),
-      themeMode: ThemeMode.system,
-      home: const Login(),
-    ),
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // ligação à BD Supabase
+  await Supabase.initialize(
+    url: 'https://dfgjjfmagfrecbaupnqg.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmZ2pqZm1hZ2ZyZWNiYXVwbnFnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ0MjUxMDMsImV4cCI6MjAzMDAwMTEwM30.EozAkeVU45haToX4opXdHFfHJEqjgjtwlt-sMxdvivw',
   );
-  // });
+  // .ligação à BD Supabase
+  
+  WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
+  await FlutterConfig.loadEnvVariables();
+
+// Para desenvolvimento
+  HttpOverrides.global = MyHttpOverrides();
+// .Para desenvolvimento
+
+  runApp(const MainApp());
+  //injectar as dependencias globais
+  DependencyInjection.init();
 }
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Money Doctor',
+      theme: AppTheme.appTheme, // estilização do tema definido em styles/theme
+      home: const SplashPage(), // pagina de entrada da aplicação
+      getPages: AppPages.pages,
+    );
+  }
+}
+
+// Para desenvolvimento
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+// .Para desenvolvimento
