@@ -1,4 +1,4 @@
-<img src="images/logo.png" width="900" >
+<img src="assets/images/logo.png" width="900" >
 
 Universidade Aberta 
 Master's in Computer Engineering and Web Technology
@@ -25,6 +25,7 @@ In today's rapidly accelerating world, where financial transactions occur with t
 The history of financial management applications dates back to the early 21st century, coinciding with the rise of smartphones and the proliferation of mobile apps. As mobile technology became more accessible, developers began creating tailored applications to address various aspects of personal finance. The initial offerings were rudimentary, providing basic functionalities such as expense tracking and budgeting. However, with technological advancements and increasing demand for more robust solutions, financial management apps evolved into sophisticated platforms capable of handling complex financial tasks. These apps play a crucial role in promoting financial literacy and fostering responsible financial habits in today's society, where complexity and financial uncertainty prevail. They enable users to control expenses, identify areas for saving, and plan for the future effectively. Additionally, in businesses, these apps streamline accounting processes, enhance transparency, and facilitate better decision-making.
 
 ### MoneyDoctor Example
-<img src="images/exampleHome.png" width="500" >
-<img src="images/example.png" width="500" >
-
+<img src="readme_images/intro.png" width="500" >
+<img src="readme_images/categories.png" width="500" >
+<img src="readme_images/hamburguer.png" width="500" >
+<img src="readme_images/view.png" width="500" >
