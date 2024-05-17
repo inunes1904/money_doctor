@@ -27,7 +27,7 @@ class OrcamentosPage extends GetView<OrcamentosController> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(color: GlobalColors.black),
+                        .copyWith(color: Colors.blueAccent),
                   ),
                   const SizedBox(height: 10),
                   Expanded(

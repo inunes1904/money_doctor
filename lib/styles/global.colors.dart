@@ -44,7 +44,7 @@ class GlobalColors {
   static const Color mainColor = pearlWhite; // Adjusted to pearl color
   static const Color textColor = Color(0xff4F4F4F);
 
-  static const Color navbarColor = Color.fromARGB(255, 178, 169, 140);
+  static const Color navbarColor = Color.fromARGB(40, 0, 120, 180);
   static const Color primaryColor = Color(0xffA5A5A5); // Adjusted to a pearl-like color
   static const Color secondaryColor = Color(0xffA1A3A6);
   static const Color dangerColor = Color(0xffdc3545);

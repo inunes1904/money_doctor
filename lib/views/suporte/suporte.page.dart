@@ -24,7 +24,7 @@ class SuportePage extends GetView<SuporteController> {
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
-                      .copyWith(color: GlobalColors.black),
+                      .copyWith(color: Colors.blueAccent),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -34,7 +34,7 @@ class SuportePage extends GetView<SuporteController> {
                 const SizedBox(height: 8),
                 SelectableText(
                   controller.emailSuporte,
-                  style: const TextStyle(fontSize: 16, color: GlobalColors.navbarColor),
+                  style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
                   onTap: () {
                     // função para abrir e-mail
                   },
