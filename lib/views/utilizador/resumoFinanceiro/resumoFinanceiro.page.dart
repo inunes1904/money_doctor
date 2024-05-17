@@ -28,7 +28,7 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(color: GlobalColors.black),
+                        .copyWith(color: Colors.blueAccent),
                   ),
                   const SizedBox(height: 10),
                   Obx(() => controller.saldos.isEmpty

@@ -15,19 +15,23 @@ class LoginPage extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarPublic(),
-      drawer: const SideMenu(),
+      //drawer: const SideMenu(),
       body: Center(
           child: SingleChildScrollView(
         padding: const EdgeInsets.all(6),
         child: Column(
           children: [
             Text(
-              'LOGIN',
+              'Login',
             style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(color: GlobalColors.black),
+                        .copyWith(color: Colors.blueAccent),
                   ),
+            const SizedBox(height: 20),
+            const Image(
+              image: AssetImage('assets/images/ICON.png'),
+            ),
             const SizedBox(height: 10),
             Text(
               'Bem-vindo à aplicação da Money Doctor',
@@ -42,7 +46,7 @@ class LoginPage extends GetView<LoginController> {
               padding: const EdgeInsets.only(
                   top: 20.0, bottom: 20.0, right: 10.0, left: 10.0),
               margin: const EdgeInsets.only(
-                  top: 30.0, bottom: 10.0, right: 8.0, left: 8.0),
+                  top: 30.0, bottom: 150.0, right: 8.0, left: 8.0),
               child: Form(
                 key: controller.formKey,
                 child: Column(
@@ -78,6 +82,9 @@ class LoginPage extends GetView<LoginController> {
                           children: [
                             const SizedBox(height: 10.0),
                             ButtonUtils.getElevatedButtons(context,
+                                styleElevatedButton: ButtonStyle(
+                                  backgroundColor: WidgetStateProperty.all<Color>(Colors.blueGrey),
+                                ),
                                 textElevatedButton: "Entrar",
                                 functionElevatedButton: () => controller
                                     .submit(context, key: controller.formKey),

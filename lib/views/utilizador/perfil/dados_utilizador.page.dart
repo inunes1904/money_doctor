@@ -29,7 +29,7 @@ class DadosUtilizadorPage extends GetView<DadosUtilizadorController> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(color: GlobalColors.black),
+                        .copyWith(color: Colors.blueAccent),
                   ),
                   const SizedBox(height: 10),
                   Card(
