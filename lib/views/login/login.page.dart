@@ -15,7 +15,7 @@ class LoginPage extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarPublic(),
-      //drawer: const SideMenu(),
+      drawer: const SideMenu(),
       body: Center(
           child: SingleChildScrollView(
         padding: const EdgeInsets.all(6),
@@ -83,7 +83,7 @@ class LoginPage extends GetView<LoginController> {
                             const SizedBox(height: 10.0),
                             ButtonUtils.getElevatedButtons(context,
                                 styleElevatedButton: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all<Color>(Colors.blueGrey),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
                                 ),
                                 textElevatedButton: "Entrar",
                                 functionElevatedButton: () => controller
