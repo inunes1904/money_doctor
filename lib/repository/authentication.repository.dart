@@ -44,7 +44,8 @@ class AuthenticationRepository implements AuthenticationInterface {
 
       if (response.session != null && response.user != null) {
         // Guarda o token de acesso
-        await _storage.writeSecureData(StorageItem("token", response.session!.accessToken));
+        await _storage.writeSecureData(
+            StorageItem("token", response.session!.accessToken));
 
         // Obter informações adicionais da tabela 'utilizadores'
         final userResponse = await _client
@@ -62,13 +63,16 @@ class AuthenticationRepository implements AuthenticationInterface {
         // Atualizar o campo 'ultimo_acesso'
         await _client
             .from('utilizadores')
-            .update({'ultimo_acesso': DateTime.now().toIso8601String()})
-            .eq('id', response.user!.id);
+            .update({'ultimo_acesso': DateTime.now().toIso8601String()}).eq(
+                'id', response.user!.id);
 
         // Guarda os dados no armazenamento seguro (local)
-        await _storage.writeSecureData(StorageItem("emailUtilizador", userData['email']));
-        await _storage.writeSecureData(StorageItem("nomeProprio", userData['nome_proprio']));
-        await _storage.writeSecureData(StorageItem("username", userData['username']));
+        await _storage
+            .writeSecureData(StorageItem("emailUtilizador", userData['email']));
+        await _storage.writeSecureData(
+            StorageItem("nomeProprio", userData['nome_proprio']));
+        await _storage
+            .writeSecureData(StorageItem("username", userData['username']));
         await _storage.writeSecureData(StorageItem("userId", userData['id']));
 
         return right(true);
@@ -101,7 +105,8 @@ class AuthenticationRepository implements AuthenticationInterface {
   }) async {
     try {
       // Cria a conta de utilizador com e-mail e senha
-      final AuthResponse res = await _client.auth.signUp(email: email, password: password);
+      final AuthResponse res =
+          await _client.auth.signUp(email: email, password: password);
 
       // Verifica se a sessão foi criada com sucesso
       if (res.user != null) {
@@ -113,8 +118,7 @@ class AuthenticationRepository implements AuthenticationInterface {
           'id': res.user!.id,
         });
 
-          return right(true);
-      
+        return right(true);
       } else {
         return left("Erro no registo do usuário.");
       }
@@ -124,7 +128,8 @@ class AuthenticationRepository implements AuthenticationInterface {
   }
 
   @override
-  Future<Either<String, bool>> recuperarPassword({required String email}) async {
+  Future<Either<String, bool>> recuperarPassword(
+      {required String email}) async {
     try {
       await _client.auth.resetPasswordForEmail(email);
       return right(true);

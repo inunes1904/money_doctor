@@ -61,8 +61,7 @@ class LoginController extends GetxController {
       );
     }, (r) {
       if (res == right(true)) {
-        // Guarda dados localmente
-
+        // Guarda dados localmente no metódo de login do repositório
         // Redirecciona para a View Home
         Get.offNamed(AppRoutes.home);
       } else {

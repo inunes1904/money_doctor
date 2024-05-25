@@ -23,13 +23,8 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    'Resumo Financeiro',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.blueAccent),
-                  ),
+                  Text('Resumo Financeiro',
+                      style: Theme.of(context).textTheme.titleLarge!),
                   const SizedBox(height: 10),
                   Obx(() => controller.saldos.isEmpty
                       ? Center(
@@ -74,7 +69,7 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 6.0),
                   Obx(() => controller.investimentos.isEmpty
                       ? Center(
                           child: Text(
@@ -88,7 +83,8 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: controller.investimentos.length,
                           itemBuilder: (context, index) {
-                            final investimento = controller.investimentos[index];
+                            final investimento =
+                                controller.investimentos[index];
                             return Card(
                               elevation: 2,
                               shape: RoundedRectangleBorder(
@@ -104,7 +100,7 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                                   ),
                                 ),
                                 subtitle: Text(
-                                  '${investimento.valor.toStringAsFixed(2)} € - ${investimento.descricao}',
+                                  '${investimento.valor.toStringAsFixed(2)} €',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ),

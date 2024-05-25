@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moneydoctor/styles/global.colors.dart';
-
 import '../../utils/button.utils.dart';
 import '../../utils/input.utils.dart';
 import '../../widgets/header/header.dart';
@@ -20,7 +18,9 @@ class RegistoPage extends GetView<RegistoController> {
           children: [
             Text(
               'Novo Utilizador',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: GlobalColors.black),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!,
             ),
             const SizedBox(height: 10),
             SizedBox(
@@ -78,26 +78,34 @@ class RegistoPage extends GetView<RegistoController> {
                             inputFieldRequired: true,
                             inputFieldLimitedNumber: 20,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
+                          Obx(() {
+                            if (controller.isAuthenticating.value) {
+                              return const CircularProgressIndicator();
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 2.0, right: 2.0),
+                                child: ButtonUtils.getElevatedButtons(
+                                  context,
+                                  styleElevatedButton: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.green),
+                                  ),
+                                  textElevatedButton: "Registar",
+                                  functionElevatedButton: () =>
+                                      controller.submit(context,
+                                          key: controller.registoKey),
+                                  elevatedButtonIcon: Icons.app_registration,
+                                ),
+                              );
+                            }
+                          })
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Obx(() {
-                    if (controller.isAuthenticating.value) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-                        child: ButtonUtils.getElevatedButtons(context,
-                            textElevatedButton: "Registar",
-                            functionElevatedButton: () => controller
-                                .submit(context, key: controller.registoKey),
-                            elevatedButtonIcon: Icons.app_registration),
-                      );
-                    }
-                  })
                 ]),
               ),
             ),

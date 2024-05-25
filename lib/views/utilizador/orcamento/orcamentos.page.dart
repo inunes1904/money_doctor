@@ -22,13 +22,8 @@ class OrcamentosPage extends GetView<OrcamentosController> {
             } else {
               return Column(
                 children: [
-                  Text(
-                    'Orçamentos',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.blueAccent),
-                  ),
+                  Text('Orçamentos',
+                      style: Theme.of(context).textTheme.titleLarge!),
                   const SizedBox(height: 10),
                   Expanded(
                     child: Obx(() {
@@ -141,17 +136,21 @@ class OrcamentosPage extends GetView<OrcamentosController> {
                       }
                     }),
                   ),
-                  ElevatedButton(
-                    onPressed: () =>
-                        controller.modalAdicionarOrcamento(context),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          controller.modalAdicionarOrcamento(context),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 14),
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
+                      child: const Text("Adicionar"),
                     ),
-                    child: const Text("Adicionar"),
                   ),
                 ],
               );

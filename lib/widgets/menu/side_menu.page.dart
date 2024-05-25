@@ -28,7 +28,7 @@ class SideMenu extends GetView<SideMenuController> {
         child: ListTile(
           title: Image.asset(
             'assets/images/logo.png',
-            height: 75,
+            height: 40,
           ),
           onTap: () {
             menuChoosenOption(controller.storedUserId != null

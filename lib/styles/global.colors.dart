@@ -6,11 +6,6 @@ class GlobalColors {
   static const Color titleTextColor = Color(0xff4F4F4F);
   static const Color subTitleTextColor = Color(0xff797878);
 
-  // Pearl Colors
-  static const Color pearlWhite = Color(0xffFDEDEC);
-  static const Color lightPearl = Color(0xffFADFD8);
-  static const Color extraLightPearl = Color(0xffFFF8F5);
-
   static const Color orange = Color(0xffE65829);
   static const Color lightOrange = Color(0xfffa9881);
   static const Color red = Color(0xffF72804);
@@ -41,11 +36,11 @@ class GlobalColors {
   static const Color white85 = Color(0xD9FFFFFF);
   static const Color white80 = Color(0xCCFFFFFF);
 
-  static const Color mainColor = pearlWhite; // Adjusted to pearl color
+  static const Color mainColor = Color.fromARGB(204, 0, 30, 129);
   static const Color textColor = Color(0xff4F4F4F);
 
-  static const Color navbarColor = Color.fromARGB(40, 0, 120, 180);
-  static const Color primaryColor = Color(0xffA5A5A5); // Adjusted to a pearl-like color
+  static const Color navbarColor = Color.fromARGB(255, 0, 120, 180);
+  static const Color primaryColor = Color.fromARGB(204, 0, 30, 129);
   static const Color secondaryColor = Color(0xffA1A3A6);
   static const Color dangerColor = Color(0xffdc3545);
   static const Color successColor = Color(0xff198754);

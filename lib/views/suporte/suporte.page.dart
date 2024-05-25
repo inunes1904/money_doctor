@@ -16,50 +16,55 @@ class SuportePage extends GetView<SuporteController> {
         drawer: const SideMenu(),
         body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
             child: Column(
               children: [
                 Text(
                   'Suporte',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.blueAccent),
+                  style: Theme.of(context).textTheme.titleLarge!,
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "Para qualquer questão, entre em contacto:",
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  'Para qualquer questão, entre em contacto:',
+                  style: Theme.of(context).textTheme.titleMedium!,
                 ),
                 const SizedBox(height: 8),
                 SelectableText(
                   controller.emailSuporte,
-                  style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
+                  style:
+                      const TextStyle(fontSize: 14, color: Colors.blueAccent),
                   onTap: () {
                     // função para abrir e-mail
                   },
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "FAQs",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.faqs.length,
-                  itemBuilder: (context, index) {
-                    final faq = controller.faqs[index];
-                    return ExpansionTile(
-                      title: Text(faq['Questão']!),
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(faq['Resposta']!),
-                        )
-                      ],
-                    );
-                  },
+                const SizedBox(height: 10),
+                Card(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        "FAQs",
+                        style: Theme.of(context).textTheme.headlineLarge!,
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: controller.faqs.length,
+                        itemBuilder: (context, index) {
+                          final faq = controller.faqs[index];
+                          return ExpansionTile(
+                            title: Text(faq['Questão']!),
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(faq['Resposta']!),
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -94,7 +94,7 @@ class AppTheme {
     textTheme: const TextTheme(
       titleLarge: TextStyle(
         fontSize: 26,
-        color: GlobalColors.mainColor,
+        color: Color.fromARGB(204, 0, 87, 226),
         fontWeight: FontWeight.bold,
       ),
 

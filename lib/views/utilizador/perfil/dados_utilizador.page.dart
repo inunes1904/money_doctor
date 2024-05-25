@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import '../../../styles/global.colors.dart';
+import 'package:intl/intl.dart';
 import '../../../widgets/header/header.dart';
 import '../../../widgets/menu/side_menu.page.dart';
 import 'dados_utilizador.controller.dart';
@@ -23,14 +23,9 @@ class DadosUtilizadorPage extends GetView<DadosUtilizadorController> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    'Dados Utilizador',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.blueAccent),
-                  ),
-                  const SizedBox(height: 10),
+                  Text('Dados Utilizador',
+                      style: Theme.of(context).textTheme.titleLarge!),
+                  const SizedBox(height: 20),
                   Card(
                     elevation: 4,
                     shape: RoundedRectangleBorder(
@@ -49,7 +44,7 @@ class DadosUtilizadorPage extends GetView<DadosUtilizadorController> {
                             ),
                             onChanged: (val) => controller.nomeProprio(val),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           TextFormField(
                             initialValue: utilizador.username,
                             decoration: const InputDecoration(
@@ -58,7 +53,7 @@ class DadosUtilizadorPage extends GetView<DadosUtilizadorController> {
                             ),
                             onChanged: (val) => controller.username(val),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           TextFormField(
                             initialValue: utilizador.email,
                             decoration: const InputDecoration(
@@ -67,31 +62,63 @@ class DadosUtilizadorPage extends GetView<DadosUtilizadorController> {
                             ),
                             enabled: false,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           TextFormField(
-                            initialValue: utilizador.ultimoAcesso.toString(),
+                            initialValue: DateFormat('dd/MM/yyyy - HH:mm:ss')
+                                .format(utilizador.ultimoAcesso!),
                             decoration: const InputDecoration(
                               labelText: 'Último Acesso',
                               border: OutlineInputBorder(),
                             ),
                             enabled: false,
                           ),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: controller.atualizarDados,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 15),
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                              child: const Text('Atualizar Dados'),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: controller.atualizarDados,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
+                  GestureDetector(
+                    onTap: () => controller.mostrarPopUpEmailPass(context),
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.lock,
+                              color: Colors.blueAccent,
+                              size: 30,
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: Text(
+                                'Atualizar Dados Sensíveis',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: const Text('Atualizar Dados'),
                     ),
                   ),
                 ],

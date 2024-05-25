@@ -33,14 +33,7 @@ final menuOptions = [
     showAfterLogin: true,
   ),
   MenuOptions(
-    icon: const Icon(Icons.analytics, color: Colors.orange),
-    title: 'Resumo Financeiro',
-    link: AppRoutes.resumoFinanceiro,
-    needLogin: true,
-    showAfterLogin: true,
-  ),
-  MenuOptions(
-    icon: const Icon(Icons.show_chart, color: Colors.red),
+    icon: const Icon(Icons.show_chart, color: Colors.green),
     title: 'Investimentos',
     link: AppRoutes.investimentos,
     needLogin: true,
@@ -54,6 +47,20 @@ final menuOptions = [
     showAfterLogin: true,
   ),
   MenuOptions(
+    icon: const Icon(Icons.analytics, color: Colors.orange),
+    title: 'Resumo Financeiro',
+    link: AppRoutes.resumoFinanceiro,
+    needLogin: true,
+    showAfterLogin: true,
+  ),
+  MenuOptions(
+    icon: const Icon(Icons.report_sharp, color: Colors.amberAccent),
+    title: 'Relatórios e Análises',
+    link: AppRoutes.relatorios,
+    needLogin: true,
+    showAfterLogin: true,
+  ),
+  MenuOptions(
     icon: const Icon(Icons.support_agent, color: Colors.cyan),
     title: 'Suporte',
     link: AppRoutes.suporte,
@@ -61,7 +68,7 @@ final menuOptions = [
     showAfterLogin: true,
   ),
   MenuOptions(
-    icon: const Icon(Icons.logout, color: Colors.brown),
+    icon: const Icon(Icons.logout, color: Colors.red),
     title: 'Logout',
     link: '/logout',
     needLogin: true,

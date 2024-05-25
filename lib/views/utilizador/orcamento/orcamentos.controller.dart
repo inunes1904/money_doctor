@@ -187,27 +187,49 @@ class OrcamentosController extends GetxController {
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            SizedBox(
+            width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+                child: const Text('Adicionar'),
+                onPressed: () {
+                  final orcamento = Orcamento(
+                    id: uuid.v4(), // ID único para o orçamento
+                    utilizadorId: storedUserId.value,
+                    categoria: categoriaController.text,
+                    valorPlaneado: double.tryParse(valorController.text) ?? 0,
+                    dataOrcamento: DateTime.now(),
+                    descricao: descricaoController.text,
+                    itens: [], // Inicialmente, sem itens
+                  );
+                  adicionarOrcamento(orcamento);
+                  Navigator.of(context).pop();
+                },
+              ),
             ),
-            TextButton(
-              child: const Text('Adicionar'),
-              onPressed: () {
-                final orcamento = Orcamento(
-                  id: uuid.v4(), // ID único para o orçamento
-                  utilizadorId: storedUserId.value,
-                  categoria: categoriaController.text,
-                  valorPlaneado: double.tryParse(valorController.text) ?? 0,
-                  dataOrcamento: DateTime.now(),
-                  descricao: descricaoController.text,
-                  itens: [], // Inicialmente, sem itens
-                );
-                adicionarOrcamento(orcamento);
-                Navigator.of(context).pop();
-              },
+             SizedBox(
+            width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                backgroundColor: Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+                child: const Text('Cancelar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
             ),
           ],
         );

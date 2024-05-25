@@ -37,4 +37,16 @@ class UtilizadorRepository {
       return left(e.toString());
     }
   }
+  
+  Future<Either<String, bool>> alterarEmailPassword(
+      {required String email, required String password}) async {
+    try {
+      UserAttributes alterarPassPedido =
+          UserAttributes(email: email, password: password);
+      await _client.auth.updateUser(alterarPassPedido);
+      return right(true);
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
 }

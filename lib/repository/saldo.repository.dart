@@ -5,7 +5,8 @@ import '../models/utilizador/saldo.dart';
 class SaldoRepository {
   final SupabaseClient _client = Supabase.instance.client;
 
-  Future<Either<String, List<Saldo>>> carregarSaldos(String utilizadorId) async {
+  Future<Either<String, List<Saldo>>> carregarSaldos(
+      String utilizadorId) async {
     try {
       final response = await _client
           .from('saldos')
@@ -24,7 +25,8 @@ class SaldoRepository {
     }
   }
 
-  Future<Either<String, bool>> atualizarSaldo(String utilizadorId, double valor, bool adicionar, String descricao) async {
+  Future<Either<String, bool>> atualizarSaldo(String utilizadorId, double valor,
+      bool adicionar, String descricao) async {
     try {
       final response = await _client
           .from('saldos')
@@ -62,13 +64,10 @@ class SaldoRepository {
         double novoSaldo = saldoAtual + (adicionar ? valor : -valor);
         final saldoId = response['id'];
 
-        await _client
-            .from('saldos')
-            .update({
-              'saldo': novoSaldo,
-              'data_atualizacao': DateTime.now().toIso8601String()
-            })
-            .eq('utilizador_id', utilizadorId);
+        await _client.from('saldos').update({
+          'saldo': novoSaldo,
+          'data_atualizacao': DateTime.now().toIso8601String()
+        }).eq('utilizador_id', utilizadorId);
 
         // Adicionar transação
         await _client.from('transacoes').insert({

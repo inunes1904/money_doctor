@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import '../../../styles/global.colors.dart';
 import '../../../widgets/header/header.dart';
 import '../../../widgets/menu/side_menu.page.dart';
 import 'investimentos.controller.dart';
@@ -22,13 +21,8 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                 } else {
                   return Column(
                     children: [
-                      Text(
-                        'Investimentos',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(color: Colors.blueAccent),
-                      ),
+                      Text('Investimentos',
+                          style: Theme.of(context).textTheme.titleLarge!),
                       const SizedBox(height: 10),
                       Expanded(
                         child: Obx(() {
@@ -45,9 +39,13 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                               itemBuilder: (context, index) {
                                 final investimento =
                                     controller.investimentos[index];
+                                final valorFinal =
+                                    controller.valorFinalInvestimentos[
+                                            investimento.id] ??
+                                        investimento.valor;
                                 return Card(
                                   margin: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
+                                      vertical: 5),
                                   elevation: 4,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -71,6 +69,10 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                                           style: const TextStyle(fontSize: 16),
                                         ),
                                         Text(
+                                          "Valor Atual: ${valorFinal.toStringAsFixed(2)} €",
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                        Text(
                                           "Descrição: ${investimento.descricao}",
                                           style: const TextStyle(fontSize: 14),
                                         ),
@@ -79,8 +81,9 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                                     trailing: IconButton(
                                       icon: const Icon(Icons.delete,
                                           color: Colors.red),
-                                      onPressed: () => controller
-                                          .removerInvestimento(investimento.id),
+                                      onPressed: () =>
+                                          controller.removerInvestimento(
+                                              investimento.id, valorFinal),
                                     ),
                                   ),
                                 );
@@ -89,18 +92,18 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                           }
                         }),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      SizedBox(
+                        width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () =>
                               controller.modalAdicionarInvestimento(context),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 15),
+                            backgroundColor: Colors.green,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            textStyle: const TextStyle(fontSize: 16),
                           ),
                           child: const Text("Adicionar"),
                         ),

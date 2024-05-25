@@ -10,7 +10,7 @@ class AppBarPublic extends AppBar {
               bottom: 0,
               left: 0,
             ),
-            child: Image.asset('assets/images/logo-without-icon.png', width: 200),
+            child: Image.asset('assets/images/logo-without-icon.png', width: 180),
           ),
         );
 }

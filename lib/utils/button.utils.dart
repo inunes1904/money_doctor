@@ -6,13 +6,18 @@ abstract class ButtonUtils {
   static TextButton getTextButtons(
       {VoidCallback? functionTextButton,
       required String textButtonText,
-      TextStyle? styleTextButton}) {
+      TextStyle? styleTextButton,
+      Color? backgroundColorTextButton,}) {
     return TextButton(
+      style: TextButton.styleFrom(
+      backgroundColor: backgroundColorTextButton ?? Colors.transparent,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    ),
       onPressed: functionTextButton,
       child: Text(
         textButtonText,
         style: styleTextButton,
-      ),
+      ), 
     );
   }
 
