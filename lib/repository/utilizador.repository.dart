@@ -23,21 +23,17 @@ class UtilizadorRepository {
   Future<Either<String, bool>> alteraUtilizador(
       Utilizador novoUtilizador) async {
     try {
-      final response = await _client
+      await _client
           .from('utilizadores')
           .update(novoUtilizador.toJson())
           .eq('id', novoUtilizador.id);
 
-      if (response.error != null) {
-        return left(response.error!.message);
-      } else {
-        return right(response.data['id'] != null);
-      }
+      return right(true);
     } catch (e) {
       return left(e.toString());
     }
   }
-  
+
   Future<Either<String, bool>> alterarEmailPassword(
       {required String email, required String password}) async {
     try {
