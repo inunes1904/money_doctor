@@ -79,7 +79,7 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                                       ],
                                     ),
                                     trailing: IconButton(
-                                      icon: const Icon(Icons.delete,
+                                      icon: const Icon(Icons.stop_circle_outlined,
                                           color: Colors.red),
                                       onPressed: () =>
                                           controller.removerInvestimento(

@@ -18,6 +18,8 @@ class DadosUtilizadorController extends GetxController {
   RxString storedUserId = "".obs;
   TextEditingController alterarEmailController = TextEditingController();
   TextEditingController alterarPasswordController = TextEditingController();
+  TextEditingController alterarRepitaPasswordController =
+      TextEditingController();
 
   @override
   Future<void> onInit() async {
@@ -38,7 +40,7 @@ class DadosUtilizadorController extends GetxController {
         utilizador(dados);
         nomeProprio(dados.nomeProprio);
         username(dados.username);
-        alterarEmailController.text = dados.email; // Pre-fill email
+        alterarEmailController.text = dados.email;
       } else {
         hasError(true);
       }
@@ -123,6 +125,15 @@ class DadosUtilizadorController extends GetxController {
                 ),
                 obscureText: true,
               ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: alterarRepitaPasswordController,
+                decoration: const InputDecoration(
+                  labelText: 'Repita a Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
             ],
           ),
           actions: [
@@ -130,9 +141,23 @@ class DadosUtilizadorController extends GetxController {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  atualizarDadosSensiveis(alterarEmailController.text,
-                      alterarPasswordController.text);
-                  Get.back();
+                  if (alterarPasswordController.text !=
+                      alterarRepitaPasswordController.text) {
+                    QuickAlert.show(
+                      context: Get.context!,
+                      type: QuickAlertType.error,
+                      title: 'Erro nas Passwords!',
+                      text: "Passwords não coincidem",
+                      confirmBtnText: 'Ok',
+                      confirmBtnColor: GlobalColors.dangerColor,
+                    );
+                  } else {
+                    atualizarDadosSensiveis(
+                      alterarEmailController.text,
+                      alterarPasswordController.text,
+                    );
+                    Get.back();
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   padding:

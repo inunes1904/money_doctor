@@ -112,7 +112,7 @@ class DadosUtilizadorPage extends GetView<DadosUtilizadorController> {
                             const SizedBox(width: 20),
                             Expanded(
                               child: Text(
-                                'Atualizar Dados Sensíveis',
+                                'Atualizar Credenciais',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
