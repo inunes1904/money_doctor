@@ -124,7 +124,7 @@ class InvestimentosController extends GetxController {
             context: Get.context!,
             type: QuickAlertType.success,
             title: 'Sucesso',
-            text: 'Investimento removido com sucesso!',
+            text: 'Investimento liquidado com sucesso!',
             confirmBtnText: 'Ok',
             confirmBtnColor: GlobalColors.successColor,
           );
