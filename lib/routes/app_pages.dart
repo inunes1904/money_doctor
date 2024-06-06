@@ -1,12 +1,16 @@
 import 'package:get/get.dart';
 import 'package:moneydoctor/views/recuperarpass/recuperarpass.binding.dart';
 import 'package:moneydoctor/views/recuperarpass/recuperarpass.page.dart';
+import 'package:moneydoctor/views/utilizador/partilhas/detalhesPartilhas/detalhesPartilhas.page.dart';
 import 'package:moneydoctor/views/utilizador/relatorios/relatorios.binding.dart';
 import 'package:moneydoctor/views/utilizador/relatorios/relatorios.page.dart';
 import '../views/utilizador/investimento/investimentos.binding.dart';
 import '../views/utilizador/investimento/investimentos.page.dart';
 import '../views/utilizador/orcamento/orcamentos.binding.dart';
 import '../views/utilizador/orcamento/orcamentos.page.dart';
+import '../views/utilizador/partilhas/detalhesPartilhas/detalhesPartilhas.binding.dart';
+import '../views/utilizador/partilhas/partilhas.binding.dart';
+import '../views/utilizador/partilhas/partilhas.page.dart';
 import '../views/utilizador/perfil/dados_utilizador.binding.dart';
 import '../views/utilizador/perfil/dados_utilizador.page.dart';
 import '../views/utilizador/relatorios/analiseinvestimentos/analiseinvestimentos.binding.dart';
@@ -103,11 +107,16 @@ class AppPages {
       page: () => const AnaliseInvestimentosPage(),
       binding: AnaliseInvestimentosBinding(),
     ),
-    // GetPage(
-    //   name: AppRoutes.despesasPartilhadas,
-    //   page: () => const DespesasPartilhadasPage(),
-    //   binding: DespesasPartilhadasBinding(),
-    // ),
+    GetPage(
+      name: AppRoutes.partilhas,
+      page: () => const PartilhasPage(),
+      binding: PartilhasBinding(),
+    ),
+        GetPage(
+      name: AppRoutes.detalhesPartilhas,
+      page: () => const DetalhesPartilhasPage(),
+      binding: DetalhesPartilhasBinding(),
+    ),
     GetPage(
       name: AppRoutes.suporte,
       page: () => const SuportePage(),

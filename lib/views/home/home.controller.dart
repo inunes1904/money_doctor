@@ -49,21 +49,42 @@ class HomeController extends GetxController {
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  final valor = double.tryParse(valorController.text) ?? 0;
+                  final descricao = descricaoController.text;
+                  accaoSaldo == "Adicionar" ? adicionarValor(valor, descricao) : retirarValor(valor, descricao);
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 5),
+                      backgroundColor: accaoSaldo == "Adicionar" ? Colors.green : Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                child: Text('$accaoSaldo'),
+              ),
             ),
-            TextButton(
-              child: Text('$accaoSaldo'),
-              onPressed: () {
-                final valor = double.tryParse(valorController.text) ?? 0;
-                final descricao = descricaoController.text;
-                accaoSaldo == "Adicionar" ? adicionarValor(valor, descricao) : retirarValor(valor, descricao);
-                Navigator.of(context).pop();
-              },
-            ),
+            const SizedBox(height: 5,),
+            SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Get.back(),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 5),
+                    backgroundColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  child: const Text("Cancelar"),
+                ),
+              ),
           ],
         );
       },

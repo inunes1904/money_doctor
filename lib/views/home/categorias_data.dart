@@ -33,8 +33,8 @@ final List<Categorias> categoriasList = [
     ),    
     Categorias(
       titulo: "Despesas Partilhadas",
-      imagem: "assets/images/categorias/partilhas_grey.png",
+      imagem: "assets/images/categorias/partilhas.png",
       descricao: "Veja as suas despesas partilhadas.",
-      link: "",
+      link: "/partilhas",
     ),
   ];

@@ -14,5 +14,6 @@ class AppRoutes {
   static String despesasMensais = '/despesasMensais';
   static String despesasVsReceitas = '/despesasVsReceitas';
   static String analiseInvestimentos = '/analiseInvestimentos';
-  static String despesasPartilhadas = '/despesasPartilhadas';
+  static String partilhas = '/partilhas';
+  static String detalhesPartilhas = '/detalhesPartilhas';
 }

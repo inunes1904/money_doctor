@@ -60,6 +60,13 @@ final menuOptions = [
     needLogin: true,
     showAfterLogin: true,
   ),
+    MenuOptions(
+    icon: const Icon(Icons.share_sharp, color: Colors.blue),
+    title: 'Despesas Partilhadas',
+    link: AppRoutes.partilhas,
+    needLogin: true,
+    showAfterLogin: true,
+  ),
   MenuOptions(
     icon: const Icon(Icons.support_agent, color: Colors.cyan),
     title: 'Suporte',

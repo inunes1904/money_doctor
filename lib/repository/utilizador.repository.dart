@@ -1,21 +1,34 @@
+import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fpdart/fpdart.dart';
 
 import '../models/utilizador/utilizador.dart';
+import '../styles/global.colors.dart';
+import 'authentication.repository.dart';
 
 class UtilizadorRepository {
   final SupabaseClient _client = Supabase.instance.client;
+  final AuthenticationRepository _repoAuth = AuthenticationRepository();
+
 
   /// Função para retornar os dados de um utilizador para o seu perfil
   Future<Utilizador?> getDadosUtilizador(String userId) async {
-    final response =
-        await _client.from('utilizadores').select().eq('id', userId).single();
-
-    if (response.isEmpty) {
-      // erro
-      return null;
-    } else {
+    try {
+      var response = await _client.from('utilizadores').select().eq('id', userId).single();
       return Utilizador.fromJson(response);
+
+    } catch (e) {
+      QuickAlert.show(
+          context: Get.context!,
+          type: QuickAlertType.error,
+          title: 'Ocorreu um erro',
+          text: "Ocorreu um erro ao executar a tarefa que solicitou. Por favor, verifique a sua ligação à internet. Caso o problema persista, entre em contacto com a nossa equipa.",
+          confirmBtnText: 'Ok',
+          confirmBtnColor: GlobalColors.dangerColor,
+        );
+       await _repoAuth.logout();
+      return null;
     }
   }
 
