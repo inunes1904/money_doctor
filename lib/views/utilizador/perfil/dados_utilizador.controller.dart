@@ -116,7 +116,7 @@ class DadosUtilizadorController extends GetxController {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextField(
                 controller: alterarPasswordController,
                 decoration: const InputDecoration(
@@ -125,7 +125,7 @@ class DadosUtilizadorController extends GetxController {
                 ),
                 obscureText: true,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextField(
                 controller: alterarRepitaPasswordController,
                 decoration: const InputDecoration(

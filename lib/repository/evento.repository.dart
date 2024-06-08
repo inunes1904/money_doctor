@@ -108,6 +108,21 @@ class EventoRepository {
     }
   }
 
+  Future<Either<String, bool>> removerUtilizadorPartilhaEvento(
+      String eventoId, String userId) async {
+    try {
+      await _client
+          .from('participantes_evento')
+          .delete()
+          .eq('evento_id', eventoId)
+          .eq('utilizador_id', userId);
+
+      return right(true);
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
   Future<Either<String, List<Utilizador>>> carregarTodosUtilizadores() async {
     try {
       final response = await _client.from('utilizadores').select();
@@ -121,7 +136,7 @@ class EventoRepository {
     }
   }
 
-// ainda não foi criado na view
+  // ainda não foi criado na view
   Future<Either<String, bool>> editarNomePartilhaEvento(
       String eventoId, String novoNome) async {
     try {
@@ -156,6 +171,15 @@ class EventoRepository {
     }
   }
 
+  Future<Either<String, bool>> eliminarDespesa(String transacaoId) async {
+    try {
+      await _client.from('transacoes_evento').delete().eq('id', transacaoId);
+      return right(true);
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
   Future<Either<String, bool>> alterarStatusEvento(
       String eventoId, bool status) async {
     try {
@@ -169,7 +193,8 @@ class EventoRepository {
     }
   }
 
-  Future<Either<String, bool>> atualizarSaldado(String utilizadorId, String eventoId, bool saldado) async {
+  Future<Either<String, bool>> atualizarSaldado(
+      String utilizadorId, String eventoId, bool saldado) async {
     try {
       await _client
           .from('participantes_evento')

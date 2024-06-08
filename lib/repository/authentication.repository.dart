@@ -10,7 +10,7 @@ import '../services/storage_service.dart';
 abstract class AuthenticationInterface {
   Future<Either<String, bool>> login(
       {required String email, required String password});
-  Future<bool> logout();
+  Future<void> logout();
   Future<bool> getToken();
   Future<Either<String, bool>> recuperarPassword({required String email});
   Future<Either<String, bool>> registarUtilizador(
@@ -85,14 +85,14 @@ class AuthenticationRepository implements AuthenticationInterface {
   }
 
   @override
-  Future<bool> logout() async {
+  Future<void> logout() async {
     try {
       await _client.auth.signOut();
       await _storage.deleteAllSecureData();
       Get.offNamed(AppRoutes.login);
-      return true;
     } catch (e) {
-      return false;
+      await _storage.deleteAllSecureData();
+      Get.offNamed(AppRoutes.login);
     }
   }
 

@@ -27,7 +27,7 @@ class UtilizadorRepository {
           confirmBtnText: 'Ok',
           confirmBtnColor: GlobalColors.dangerColor,
         );
-       await _repoAuth.logout();
+       _repoAuth.logout();
       return null;
     }
   }

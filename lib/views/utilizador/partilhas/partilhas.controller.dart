@@ -56,26 +56,15 @@ class PartilhasController extends GetxController {
     TextEditingController nomeController = TextEditingController();
     TextEditingController descricaoController = TextEditingController();
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
+showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Criar Despesa Partilhada'),
+          content:  SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Criar Despesa Partilhada",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
               TextField(
                 controller: nomeController,
                 decoration: const InputDecoration(
@@ -136,7 +125,7 @@ class PartilhasController extends GetxController {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 15),
+                          horizontal: 20, vertical: 10),
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
@@ -145,7 +134,6 @@ class PartilhasController extends GetxController {
                     child: const Text("Criar"),
                   ),
                 ),
-              const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -164,9 +152,11 @@ class PartilhasController extends GetxController {
               const SizedBox(height: 10),
             ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    },
+  );
+
   }
 
   void verDetalhesEvento(Evento evento) {

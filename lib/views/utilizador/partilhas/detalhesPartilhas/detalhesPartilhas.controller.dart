@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moneydoctor/routes/app_routes.dart';
 import 'package:quickalert/quickalert.dart';
 import '../../../../models/utilizador/evento.dart';
 import '../../../../models/utilizador/evento_transacao.dart';
@@ -7,7 +8,6 @@ import '../../../../models/utilizador/evento_utilizador.dart';
 import '../../../../models/utilizador/utilizador.dart';
 import '../../../../repository/evento.repository.dart';
 import '../../../../repository/saldo.repository.dart';
-import '../../../../routes/app_routes.dart';
 import '../../../../services/storage_service.dart';
 import '../../../../styles/global.colors.dart';
 
@@ -25,7 +25,8 @@ class DetalhesPartilhasController extends GetxController {
   ).obs;
   RxList<TransacaoPartilha> transacoes = <TransacaoPartilha>[].obs;
   RxList<UtilizadorPartilha> utilizadores = <UtilizadorPartilha>[].obs;
-  RxList<Utilizador> todosUtilizadores = <Utilizador>[].obs;
+  RxList<Utilizador> todosUtilizadores = <Utilizador>[]
+      .obs; // vão popular dropdownlist para adicionar utilizador à despesa
   RxBool isLoading = RxBool(true);
   RxDouble valorTotal = 0.0.obs;
   RxDouble valorAPagar = 0.0.obs;
@@ -43,7 +44,7 @@ class DetalhesPartilhasController extends GetxController {
       evento.value = Get.arguments as Evento;
       await carregarDetalhesEvento();
       await carregarTodosUtilizadores();
-      calcularDivisaoDespesas();
+      await calcularDivisaoDespesas();
     }
   }
 
@@ -85,132 +86,123 @@ class DetalhesPartilhasController extends GetxController {
         transacoes.fold(0.0, (sum, transacao) => sum + transacao.valor);
   }
 
-  void adicionarDespesa(BuildContext context) async {
+  void adicionarDespesa(context) async {
     TextEditingController valorController = TextEditingController();
     TextEditingController descricaoController = TextEditingController();
     RxBool pago = false.obs;
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Adicionar Despesa",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              TextField(
-                controller: valorController,
-                decoration: const InputDecoration(
-                  labelText: 'Valor',
-                  border: OutlineInputBorder(),
+        return AlertDialog(
+          title: const Text('Adicionar Despesa Partilhada'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: valorController,
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: descricaoController,
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: descricaoController,
+                  decoration: const InputDecoration(
+                    labelText: 'Descrição',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Obx(() => CheckboxListTile(
-                    title: const Text("Pago"),
-                    value: pago.value,
-                    onChanged: (value) {
-                      pago.value = value!;
-                    },
-                  )),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (valorController.text.isNotEmpty &&
-                        descricaoController.text.isNotEmpty) {
-                      final valor =
-                          double.tryParse(valorController.text) ?? 0.0;
-                      final result = await _repo.adicionarDespesa(
-                        evento.value.id,
-                        storedUserId.value,
-                        valor,
-                        descricaoController.text,
-                        pago.value,
-                      );
-                      if (pago.value) {
-                        await _saldoRepo.atualizarSaldo(
+                const SizedBox(height: 10),
+                Obx(() => CheckboxListTile(
+                      title: const Text("Pago"),
+                      value: pago.value,
+                      onChanged: (value) {
+                        pago.value = value!;
+                      },
+                    )),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (valorController.text.isNotEmpty &&
+                          descricaoController.text.isNotEmpty) {
+                        final valor =
+                            double.tryParse(valorController.text) ?? 0.0;
+                        final result = await _repo.adicionarDespesa(
+                          evento.value.id,
                           storedUserId.value,
                           valor,
-                          false,
-                          'Despesa Partilhada: ${descricaoController.text}',
+                          descricaoController.text,
+                          pago.value,
                         );
+                        if (pago.value) {
+                          await _saldoRepo.atualizarSaldo(
+                            storedUserId.value,
+                            valor,
+                            false,
+                            'Despesa Partilhada: ${descricaoController.text}',
+                          );
+                        }
+                        result.match(
+                            (l) => QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.error,
+                                  title: 'Erro ao Adicionar Despesa',
+                                  text: l,
+                                  confirmBtnText: 'Ok',
+                                  confirmBtnColor: Colors.red,
+                                ),
+                            (r) => {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.success,
+                                      title: 'Despesa adicionada com sucesso!',
+                                      text:
+                                          "Adicionou uma despesa específica à Partilha.",
+                                      confirmBtnText: 'Ok',
+                                      confirmBtnColor:
+                                          GlobalColors.successColor,
+                                      onConfirmBtnTap: () => {
+                                            closeAndRefresh(),
+                                          })
+                                });
                       }
-                      result.match(
-                          (l) => QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: 'Erro ao Adicionar Despesa',
-                                text: l,
-                                confirmBtnText: 'Ok',
-                                confirmBtnColor: Colors.red,
-                              ),
-                          (r) => {
-                                QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.success,
-                                    title: 'Despesa adicionada com sucesso!',
-                                    text:
-                                        "Adicionou uma despesa específica à Partilha.",
-                                    confirmBtnText: 'Ok',
-                                    confirmBtnColor: GlobalColors.successColor,
-                                    onConfirmBtnTap: () =>
-                                        {Get.offAllNamed(AppRoutes.partilhas)})
-                              });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 15),
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
+                    child: const Text("Adicionar"),
                   ),
-                  child: const Text("Adicionar"),
                 ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.back(),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 15),
-                    backgroundColor: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Get.back(),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
+                    child: const Text("Cancelar"),
                   ),
-                  child: const Text("Cancelar"),
                 ),
-              ),
-              const SizedBox(height: 10),
-            ],
+                const SizedBox(height: 10),
+              ],
+            ),
           ),
         );
       },
@@ -218,107 +210,220 @@ class DetalhesPartilhasController extends GetxController {
   }
 
   void adicionarUtilizador(context) async {
-    await carregarTodosUtilizadores();
     selectedUser.value =
         todosUtilizadores.isNotEmpty ? todosUtilizadores.first.id : '';
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Adicionar Utilizador",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              Obx(() {
-                return DropdownButton<String>(
-                  value: selectedUser.value,
-                  onChanged: (newValue) {
-                    selectedUser.value = newValue ?? '';
-                  },
-                  items: todosUtilizadores.map((utilizador) {
-                    return DropdownMenuItem<String>(
-                      value: utilizador.id,
-                      child: Text(utilizador.username),
-                    );
-                  }).toList(),
-                );
-              }),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (selectedUser.value.isNotEmpty) {
-                      final result =
-                          await _repo.adicionarUtilizadorPartilhaEvento(
-                              evento.value.id, selectedUser.value);
-                      result.match(
-                        (l) => QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.error,
-                          title: 'Erro ao Adicionar Utilizador',
-                          text: l,
-                          confirmBtnText: 'Ok',
-                          confirmBtnColor: Colors.red,
-                        ),
-                        (r) => {
-                          QuickAlert.show(
-                            context: context,
-                            type: QuickAlertType.success,
-                            title: 'Utilizador adicionado com sucesso!',
-                            text:
-                                "O utilizador adicionado será responsável pela divisão desta despesa.",
-                            confirmBtnText: 'Ok',
-                            confirmBtnColor: GlobalColors.successColor,
-                            onConfirmBtnTap: () =>
-                                {Get.offAllNamed(AppRoutes.partilhas)},
+        return AlertDialog(
+          title: const Text('Criar Despesa Partilhada'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Adicionar Utilizador",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Obx(() {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    width: double.infinity,
+                    child: selectedUser.value != ""
+                        ? DropdownButton<String>(
+                            value: selectedUser.value,
+                            isExpanded: true,
+                            onChanged: (newValue) {
+                              selectedUser.value = newValue ?? '';
+                            },
+                            items: todosUtilizadores.map((utilizador) {
+                              return DropdownMenuItem<String>(
+                                value: utilizador.id,
+                                child: SizedBox(
+                                    width: 320,
+                                    child: Text(utilizador.username)),
+                              );
+                            }).toList(),
                           )
-                        },
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 15),
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                        : const Text("Não foram encontrados utilizadores"),
+                  );
+                }),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (selectedUser.value.isNotEmpty) {
+                        final result =
+                            await _repo.adicionarUtilizadorPartilhaEvento(
+                                evento.value.id, selectedUser.value);
+                        result.match(
+                          (l) => QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: 'Erro ao Adicionar Utilizador',
+                            text: l,
+                            confirmBtnText: 'Ok',
+                            confirmBtnColor: Colors.red,
+                          ),
+                          (r) => {
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.success,
+                              title: 'Utilizador adicionado com sucesso!',
+                              text:
+                                  "O utilizador adicionado será responsável pela divisão desta despesa.",
+                              confirmBtnText: 'Ok',
+                              confirmBtnColor: GlobalColors.successColor,
+                              onConfirmBtnTap: () => {closeAndRefresh()},
+                            )
+                          },
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
+                    child: const Text("Adicionar"),
                   ),
-                  child: const Text("Adicionar"),
                 ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.back(),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 15),
-                    backgroundColor: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Get.back(),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
+                    child: const Text("Cancelar"),
                   ),
-                  child: const Text("Cancelar"),
                 ),
-              ),
-              const SizedBox(height: 10),
-            ],
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void removerUtilizador(context) async {
+    selectedUser.value =
+        utilizadores.where((u) => u.id != evento.value.criadorId).isNotEmpty
+            ? utilizadores.firstWhere((u) => u.id != evento.value.criadorId).id
+            : '';
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Criar Despesa Partilhada'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Remover Utilizador",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Obx(() {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    width: double.infinity,
+                    child: selectedUser.value != ""
+                        ? DropdownButton<String>(
+                            value: selectedUser.value,
+                            isExpanded: true,
+                            onChanged: (newValue) {
+                              selectedUser.value = newValue ?? '';
+                            },
+                            items: utilizadores
+                                .where((utilizador) =>
+                                    utilizador.id != evento.value.criadorId)
+                                .map((utilizador) {
+                              return DropdownMenuItem<String>(
+                                value: utilizador.id,
+                                child: SizedBox(
+                                    width: 320,
+                                    child: Text(utilizador.username)),
+                              );
+                            }).toList(),
+                          )
+                        : const Text("Não foram encontrados utilizadores"),
+                  );
+                }),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (selectedUser.value.isNotEmpty) {
+                        final result =
+                            await _repo.removerUtilizadorPartilhaEvento(
+                                evento.value.id, selectedUser.value);
+                        result.match(
+                          (l) => QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: 'Erro ao Remover Utilizador',
+                            text: l,
+                            confirmBtnText: 'Ok',
+                            confirmBtnColor: Colors.red,
+                          ),
+                          (r) => {
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.success,
+                              title: 'Utilizador removido com sucesso!',
+                              text:
+                                  "O utilizador foi removido da divisão desta despesa.",
+                              confirmBtnText: 'Ok',
+                              confirmBtnColor: GlobalColors.successColor,
+                              onConfirmBtnTap: () => {closeAndRefresh()},
+                            )
+                          },
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: const Text("Remover"),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Get.back(),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      backgroundColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: const Text("Cancelar"),
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
           ),
         );
       },
@@ -331,7 +436,7 @@ class DetalhesPartilhasController extends GetxController {
       (l) => QuickAlert.show(
         context: Get.context!,
         type: QuickAlertType.error,
-        title: 'Erro ao Encerrar Evento',
+        title: 'Erro ao Encerrar Despesa Partilhada',
         text: l,
         confirmBtnText: 'Ok',
         confirmBtnColor: Colors.red,
@@ -344,7 +449,7 @@ class DetalhesPartilhasController extends GetxController {
         QuickAlert.show(
           context: Get.context!,
           type: QuickAlertType.success,
-          title: 'Evento Encerrado',
+          title: 'Despesa Partilhada Encerrada',
           text: calcularMensagemDivisaoDespesas(),
           confirmBtnText: 'Ok',
           confirmBtnColor: Colors.green,
@@ -376,6 +481,7 @@ class DetalhesPartilhasController extends GetxController {
     await _repo.atualizarSaldado(utilizador.id, evento.value.id, true);
 
     calcularDivisaoDespesas();
+
     QuickAlert.show(
       context: Get.context!,
       type: QuickAlertType.success,
@@ -383,12 +489,11 @@ class DetalhesPartilhasController extends GetxController {
       text: 'As despesas foram liquidadas com sucesso.',
       confirmBtnText: 'Ok',
       confirmBtnColor: GlobalColors.successColor,
+      onConfirmBtnTap: () => Get.offAllNamed(AppRoutes.partilhas)
     );
-
-    Get.offAllNamed(AppRoutes.partilhas);
   }
 
-  void calcularDivisaoDespesas() {
+  Future<void> calcularDivisaoDespesas() async {
     final int numUtilizadores = utilizadores.length;
 
     // Calcula o valor total das despesas
@@ -408,8 +513,9 @@ class DetalhesPartilhasController extends GetxController {
       // Calcula o valor que o utilizador deve pagar ou receber
       double diferenca = valorPorPessoa - valorPago;
 
-      if(utilizador.username == storedUsername.value) {
-        valorAPagar.value = diferenca;
+      if (utilizador.id == storedUserId.value) {
+        valorAPagar.value =
+            diferenca; // valor a pagar guardado para ser liquidado no saldo pessoal
       }
 
       if (utilizador.saldado) {
@@ -422,8 +528,8 @@ class DetalhesPartilhasController extends GetxController {
           calculoDespesas.add(
               '${utilizador.username} tem a receber ${(-diferenca).toStringAsFixed(2)} €');
         } else {
-          calculoDespesas
-              .add('${utilizador.username} não tem nada a pagar ou receber');
+          calculoDespesas.add(
+              '${utilizador.username} não tem valores a pagar nem a receber');
         }
       }
     }
@@ -431,5 +537,64 @@ class DetalhesPartilhasController extends GetxController {
 
   String calcularMensagemDivisaoDespesas() {
     return calculoDespesas.join('\n');
+  }
+
+  Future<void> eliminarDespesa(String transacaoId) async {
+    final transacao = transacoes.firstWhere((t) => t.id == transacaoId);
+    if (transacao.utilizadorId == storedUserId.value ||
+        evento.value.criadorId == storedUserId.value) {
+      final result = await _repo.eliminarDespesa(transacaoId);
+      result.match(
+        (l) => QuickAlert.show(
+          context: Get.context!,
+          type: QuickAlertType.error,
+          title: 'Erro ao Eliminar Transação',
+          text: l,
+          confirmBtnText: 'Ok',
+          confirmBtnColor: Colors.red,
+        ),
+        (r) async {
+          // Devolver o valor ao utilizador se a transação estava paga
+          if (transacao.pago) {
+            await _saldoRepo.atualizarSaldo(
+              transacao.utilizadorId,
+              transacao.valor,
+              true,
+              'Devolução de valor da transação eliminada ${transacao.descricao}',
+            );
+          }
+          transacoes.removeWhere((t) => t.id == transacaoId);
+
+          calcularValorTotal();
+          calcularDivisaoDespesas();
+          QuickAlert.show(
+            context: Get.context!,
+            type: QuickAlertType.success,
+            title: 'Transação Eliminada',
+            text: 'A transação foi eliminada com sucesso.',
+            confirmBtnText: 'Ok',
+            confirmBtnColor: Colors.green,
+          );
+        },
+      );
+    } else {
+      QuickAlert.show(
+        context: Get.context!,
+        type: QuickAlertType.error,
+        title: 'Erro ao Eliminar Transação',
+        text:
+            'Apenas o criador da despesa partilhada ou o utilizador que inseriu a transação pode eliminá-la.',
+        confirmBtnText: 'Ok',
+        confirmBtnColor: Colors.red,
+      );
+    }
+  }
+
+  void closeAndRefresh() async {
+    Get.back();
+    Get.back();
+    await carregarDetalhesEvento();
+    await carregarTodosUtilizadores();
+    await calcularDivisaoDespesas();
   }
 }

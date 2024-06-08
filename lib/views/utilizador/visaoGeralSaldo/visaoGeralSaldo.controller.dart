@@ -71,110 +71,102 @@ class VisaoGeralSaldoController extends GetxController {
   }
 
   Future<void> modalAdicionarRemover(context, String action) async {
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "$action Valor",
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: valorController,
-                decoration: const InputDecoration(
-                  labelText: 'Valor',
-                  border: OutlineInputBorder(),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$action valor'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: valorController,
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d*\.?\d{0,2}')),
+                  ],
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                ],
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: descricaoController,
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: descricaoController,
+                  decoration: const InputDecoration(
+                    labelText: 'Descrição',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-            width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (valorController.text.isNotEmpty &&
-                            descricaoController.text.isNotEmpty) {
-                          final valor =
-                              double.tryParse(valorController.text) ?? 0.0;
-                          if (action == "Adicionar") {
-                            adicionarValor(
-                              double.parse(valor.toStringAsFixed(2)),
-                              descricaoController.text,
-                            );
-                          } else {
-                            retirarValor(
-                              double.parse(valor.toStringAsFixed(2)),
-                              descricaoController.text,
-                            );
+                const SizedBox(height: 20),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (valorController.text.isNotEmpty &&
+                              descricaoController.text.isNotEmpty) {
+                            final valor =
+                                double.tryParse(valorController.text) ?? 0.0;
+                            if (action == "Adicionar") {
+                              adicionarValor(
+                                double.parse(valor.toStringAsFixed(2)),
+                                descricaoController.text,
+                              );
+                            } else {
+                              retirarValor(
+                                double.parse(valor.toStringAsFixed(2)),
+                                descricaoController.text,
+                              );
+                            }
+                            valorController.clear();
+                            descricaoController.clear();
+                            Navigator.pop(context);
                           }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              action == "Adicionar" ? Colors.green : Colors.red,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text("$action valor"),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
                           valorController.clear();
                           descricaoController.clear();
                           Navigator.pop(context);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: action == "Adicionar" ? Colors.green : Colors.red,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          backgroundColor: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
+                        child: const Text("Cancelar"),
                       ),
-                      child: Text(action),
                     ),
-                  ),
-                  SizedBox(
-            width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        valorController.clear();
-                        descricaoController.clear();
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                            backgroundColor: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text("Cancelar"),
-                    ),
-                  ),
-                  const SizedBox(height: 10,)
-                ],
-              ),
-            ],
+                    const SizedBox(
+                      height: 10,
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

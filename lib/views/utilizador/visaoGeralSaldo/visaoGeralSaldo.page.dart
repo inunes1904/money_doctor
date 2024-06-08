@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../utils/button.utils.dart';
 import '../../../widgets/header/header.dart';
 import '../../../widgets/menu/side_menu.page.dart';
 import 'visaoGeralSaldo.controller.dart';
@@ -95,36 +96,33 @@ class VisaoGeralSaldoPage extends GetView<VisaoGeralSaldoController> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      ElevatedButton(
-                                        onPressed: () =>
-                                            controller.modalAdicionarRemover(
+                                      SizedBox(
+                                width: 150,
+                                child: ButtonUtils.getElevatedButtons(context,
+                                    styleElevatedButton: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.green),
+                                    ),
+                                    textElevatedButton: "Saldo",
+                                    functionElevatedButton: () =>
+                                        controller.modalAdicionarRemover(
                                                 context, "Adicionar"),
-                                        style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 40, vertical: 15),
-                                          backgroundColor: Colors.green,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                        child: const Text('Adicionar'),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () =>
-                                            controller.modalAdicionarRemover(
+                                    elevatedButtonIcon: Icons.add),
+                              ),
+                              SizedBox(
+                                width: 150,
+                                child: ButtonUtils.getElevatedButtons(context,
+                                    styleElevatedButton: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.red),
+                                    ),
+                                    textElevatedButton: "Saldo",
+                                    functionElevatedButton: () =>
+                                        controller.modalAdicionarRemover(
                                                 context, "Remover"),
-                                        style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 40, vertical: 15),
-                                          backgroundColor: Colors.red,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                        child: const Text('Remover'),
-                                      ),
+                                    elevatedButtonIcon: Icons.remove),),
                                     ],
                                   ),
                                 ],
@@ -139,7 +137,7 @@ class VisaoGeralSaldoPage extends GetView<VisaoGeralSaldoController> {
                                 Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Text(
-                                    "Transacções",
+                                    "Movimentos de saldo",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!

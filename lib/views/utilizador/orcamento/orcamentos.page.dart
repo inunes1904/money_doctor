@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import '../../../styles/global.colors.dart';
+import '../../../utils/button.utils.dart';
 import '../../../widgets/header/header.dart';
 import '../../../widgets/menu/side_menu.page.dart';
 import 'orcamentos.controller.dart';
@@ -20,37 +21,37 @@ class OrcamentosPage extends GetView<OrcamentosController> {
             if (controller.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return Column(
-                children: [
-                  Text('Orçamentos',
-                      style: Theme.of(context).textTheme.titleLarge!),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: Obx(() {
-                      if (controller.orcamentos.isEmpty) {
-                        return const Center(
-                          child: Text("Nenhum orçamento registado.",
-                              style: TextStyle(fontSize: 18)),
-                        );
-                      } else {
-                        return ListView.builder(
-                          itemCount: controller.orcamentos.length,
-                          itemBuilder: (context, index) {
-                            final orcamento = controller.orcamentos[index];
-                            final totalGasto = orcamento.itens
-                                .fold(0.0, (sum, item) => sum + item.valor);
-                            final saldoRestante =
-                                orcamento.valorPlaneado - totalGasto;
-                            return Card(
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text('Orçamentos',
+                          style: Theme.of(context).textTheme.titleLarge!),
+                    ),
+                    const SizedBox(height: 10),
+                    if (controller.orcamentos.isEmpty)
+                      const Center(
+                        child: Text("Nenhum orçamento registado.",),
+                      )
+                    else
+                      ...controller.orcamentos.map((orcamento) {
+                        final totalGasto = orcamento.itens
+                            .fold(0.0, (sum, item) => sum + item.valor);
+                        final saldoRestante =
+                            orcamento.valorPlaneado - totalGasto;
+                        return Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
                                     Text(
                                       orcamento.categoria,
@@ -59,66 +60,84 @@ class OrcamentosPage extends GetView<OrcamentosController> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      "Valor Planeado: ${orcamento.valorPlaneado.toStringAsFixed(2)} €",
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      "Descrição: ${orcamento.descricao}",
-                                      style: const TextStyle(fontSize: 14),
-                                    ),
-                                    const SizedBox(height: 10),
+                                    const Spacer(),
+                                    SizedBox( width: 50, child: IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () => controller
+                                          .removerOrcamento(orcamento.id),
+                                    ),)
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "Valor Planeado: ${orcamento.valorPlaneado.toStringAsFixed(2)} €",
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "Descrição: ${orcamento.descricao}",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "Itens:",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                ...orcamento.itens.map((item) {
+                                      return Card(
+                                        child: ListTile(
+                                          title: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(item.descricao),
+Text(
+                                                "Custo ${item.valor.toStringAsFixed(2)} €",
+                                                style: const TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              
+                                              IconButton(
+                                                icon: const Icon(Icons.delete,
+                                                    color: Colors.red),
+                                                onPressed: () => controller
+                                                    .removerItem(
+                                                        orcamento.id, item.id),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                const SizedBox(height: 10),
+                                ButtonUtils.getElevatedButtons(context,
+                            styleElevatedButton: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
+                            ),
+                            textElevatedButton: "Adicionar Linha",
+                            functionElevatedButton: () =>
+                                controller.modalAdicionarItem(
+                                          context, orcamento.id),
+                            elevatedButtonIcon: Icons.add_shopping_cart),
+                            const SizedBox(height: 10,),
+                                Row(
+                                  children: [
                                     const Text(
-                                      "Itens:",
+                                      "Saldo Restante: ",
                                       style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: orcamento.itens.length,
-                                      itemBuilder: (context, itemIndex) {
-                                        final item = orcamento.itens[itemIndex];
-                                        return ListTile(
-                                          title: Text(item.descricao),
-                                          trailing: Text(
-                                            "${item.valor.toStringAsFixed(2)} €",
-                                            style: const TextStyle(
-                                                color: Colors.red),
-                                          ),
-                                          leading: IconButton(
-                                            icon: const Icon(Icons.delete),
-                                            onPressed: () =>
-                                                controller.removerItem(
-                                                    orcamento.id, item.id),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.add),
-                                          onPressed: () =>
-                                              controller.modalAdicionarItem(
-                                                  context, orcamento.id),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.delete),
-                                          onPressed: () => controller
-                                              .removerOrcamento(orcamento.id),
-                                        ),
-                                      ],
-                                    ),
                                     Text(
-                                      "Saldo Restante: ${saldoRestante.toStringAsFixed(2)} €",
+                                      "${saldoRestante.toStringAsFixed(2)} €",
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: saldoRestante >= 0
@@ -129,30 +148,26 @@ class OrcamentosPage extends GetView<OrcamentosController> {
                                     ),
                                   ],
                                 ),
-                              ),
-                            );
-                          },
+                              ],
+                            ),
+                          ),
                         );
-                      }
-                    }),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () =>
-                          controller.modalAdicionarOrcamento(context),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 14),
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text("Adicionar"),
+                      }),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ButtonUtils.getElevatedButtons(context,
+                          styleElevatedButton: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green),
+                          ),
+                          textElevatedButton: "Adicionar Orçamento",
+                          functionElevatedButton: () =>
+                              controller.modalAdicionarOrcamento(context),
+                          elevatedButtonIcon: Icons.add),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             }
           }),

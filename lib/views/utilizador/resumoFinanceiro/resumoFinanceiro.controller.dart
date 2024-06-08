@@ -5,14 +5,18 @@ import '../../../models/utilizador/saldo.dart';
 import '../../../models/utilizador/investimento.dart';
 
 import '../../../services/storage_service.dart';
+import '../../../repository/evento.repository.dart';
+import '../../../models/utilizador/evento.dart';
 
 class ResumoFinanceiroController extends GetxController {
   final SaldoRepository saldoRepository = SaldoRepository();
   final StorageService _storage = StorageService();
   final InvestimentoRepository investimentoRepository =
       InvestimentoRepository();
+  final EventoRepository eventoRepository = EventoRepository();
   final RxList<Saldo> saldos = <Saldo>[].obs;
   final RxList<Investimento> investimentos = <Investimento>[].obs;
+  final RxList<Evento> eventos = <Evento>[].obs;
   final RxString error = ''.obs;
   RxBool isLoading = RxBool(true);
   RxString storedUserId = "".obs;
@@ -39,7 +43,6 @@ class ResumoFinanceiroController extends GetxController {
             }
           },
         );
-        isLoading(false);
       });
 
       investimentoRepository
@@ -58,6 +61,23 @@ class ResumoFinanceiroController extends GetxController {
           },
         );
       });
+
+      eventoRepository.carregarEventos(storedUserId.value).then((result) {
+        result.fold(
+          (l) {
+            error.value = 'Nenhuma despesa partilhada encontrada';
+          },
+          (r) {
+            if (r.isNotEmpty) {
+              eventos.value =
+                  r.where((evento) => evento.status).cast<Evento>().toList();
+            } else {
+              error.value = 'Nenhuma despesa partilhada encontrada';
+            }
+          },
+        );
+      });
     }
+    isLoading(false);
   }
 }

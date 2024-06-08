@@ -20,8 +20,9 @@ class HomeController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     isLoading = false.obs;
-        storedUserId.value = await _storage.readSecureData("userId") ?? "";
-    storedUsername.value = await _storage.readSecureData("username") ?? "Utilizador";
+    storedUserId.value = await _storage.readSecureData("userId") ?? "";
+    storedUsername.value =
+        await _storage.readSecureData("username") ?? "Utilizador";
   }
 
   void modalAlterarSaldo(context, accaoSaldo) {
@@ -35,15 +36,25 @@ class HomeController extends GetxController {
           title: Text('$accaoSaldo valor'),
           content: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 TextField(
                   controller: valorController,
-                  decoration: const InputDecoration(labelText: 'Valor'),
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: TextInputType.number,
+                ),
+                const SizedBox(
+                  height: 10.0,
                 ),
                 TextField(
                   controller: descricaoController,
-                  decoration: const InputDecoration(labelText: 'Descrição'),
+                  decoration: const InputDecoration(
+                    labelText: 'Descrição',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ],
             ),
@@ -55,36 +66,38 @@ class HomeController extends GetxController {
                 onPressed: () {
                   final valor = double.tryParse(valorController.text) ?? 0;
                   final descricao = descricaoController.text;
-                  accaoSaldo == "Adicionar" ? adicionarValor(valor, descricao) : retirarValor(valor, descricao);
+                  accaoSaldo == "Adicionar"
+                      ? adicionarValor(valor, descricao)
+                      : retirarValor(valor, descricao);
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 5),
-                      backgroundColor: accaoSaldo == "Adicionar" ? Colors.green : Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                child: Text('$accaoSaldo'),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  backgroundColor:
+                      accaoSaldo == "Adicionar" ? Colors.green : Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                child: Text('$accaoSaldo valor'),
               ),
             ),
-            const SizedBox(height: 5,),
             SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.back(),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 5),
-                    backgroundColor: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Get.back(),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
                   ),
-                  child: const Text("Cancelar"),
                 ),
+                child: const Text("Cancelar"),
               ),
+            ),
           ],
         );
       },

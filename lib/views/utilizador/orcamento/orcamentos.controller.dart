@@ -188,16 +188,16 @@ class OrcamentosController extends GetxController {
           ),
           actions: <Widget>[
             SizedBox(
-            width: double.infinity,
+              width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
                 child: const Text('Adicionar'),
                 onPressed: () {
                   final orcamento = Orcamento(
@@ -214,17 +214,17 @@ class OrcamentosController extends GetxController {
                 },
               ),
             ),
-             SizedBox(
-            width: double.infinity,
+            SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                backgroundColor: Colors.grey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
                 child: const Text('Cancelar'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -270,24 +270,44 @@ class OrcamentosController extends GetxController {
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final item = ItemOrcamento(
+                    id: uuid.v4(), // ID único para o item
+                    orcamentoId: orcamentoId,
+                    descricao: descricaoController.text,
+                    valor: double.tryParse(valorController.text) ?? 0,
+                  );
+                  adicionarItem(orcamentoId, item);
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                child: const Text("Adicionar"),
+              ),
             ),
-            TextButton(
-              child: const Text('Adicionar'),
-              onPressed: () {
-                final item = ItemOrcamento(
-                  id: uuid.v4(), // ID único para o item
-                  orcamentoId: orcamentoId,
-                  descricao: descricaoController.text,
-                  valor: double.tryParse(valorController.text) ?? 0,
-                );
-                adicionarItem(orcamentoId, item);
-                Navigator.of(context).pop();
-              },
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text("Cancelar"),
+              ),
             ),
           ],
         );

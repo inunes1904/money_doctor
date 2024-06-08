@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../utils/button.utils.dart';
 import '../../../widgets/header/header.dart';
 import '../../../widgets/menu/side_menu.page.dart';
 import 'partilhas.controller.dart';
@@ -21,26 +22,33 @@ class PartilhasPage extends GetView<PartilhasController> {
             } else {
               return SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Despesas Partilhadas",
-                      style: Theme.of(context).textTheme.titleLarge!,
+                    Center(
+                      child: Text(
+                        "Despesas Partilhadas",
+                        style: Theme.of(context).textTheme.titleLarge!,
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    DropdownButton<String>(
-                      value: controller.filtroAtual.value,
-                      items: <String>['Todas', 'Ativas', 'Encerradas']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          controller.filtrarEventos(newValue);
-                        }
-                      },
+                    Container(
+                      alignment: Alignment.centerRight,
+                      margin: const EdgeInsets.symmetric(horizontal: 12),
+                      child: DropdownButton<String>(
+                        value: controller.filtroAtual.value,
+                        items: <String>['Todas', 'Ativas', 'Encerradas']
+                            .map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            controller.filtrarEventos(newValue);
+                          }
+                        },
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Obx(() {
@@ -58,10 +66,47 @@ class PartilhasPage extends GetView<PartilhasController> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: ListTile(
-                                title: Text(evento.nome),
-                                subtitle: Text(
-                                  "${evento.descricao}\nStatus: ${evento.status ? 'Ativo' : 'Encerrado'}",
-                                  style: const TextStyle(fontSize: 14),
+                                title: Center(
+                                    child: Text(evento.nome,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium!)),
+                                subtitle: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Descrição: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineSmall!),
+                                        Text(evento.descricao),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text("Estado: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineSmall!),
+                                        Text(
+                                          evento.status ? 'Ativa' : 'Encerrada',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: evento.status
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                                 onTap: () =>
                                     controller.verDetalhesEvento(evento),
@@ -71,22 +116,18 @@ class PartilhasPage extends GetView<PartilhasController> {
                         );
                       }
                     }),
-                    const SizedBox(height: 20),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: ElevatedButton(
-                        onPressed: () => controller.criarEvento(context),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 15),
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                      margin: const EdgeInsets.all(8.0),
+                      child: ButtonUtils.getElevatedButtons(context,
+                          styleElevatedButton: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green),
                           ),
-                        ),
-                        child: const Text('Criar Despesa Partilhada'),
-                      ),
+                          textElevatedButton: "Criar Despesa Partilhada",
+                          functionElevatedButton: () =>
+                              controller.criarEvento(context),
+                          elevatedButtonIcon: Icons.add),
                     ),
                   ],
                 ),

@@ -50,7 +50,9 @@ class InvestimentosController extends GetxController {
     final random = Random();
     for (var investimento in investimentos) {
       final valorFinal = investimento.valor *
-          (0.8 + random.nextDouble() * 0.4); // Valor final entre 80% e 120% do valor inicial
+          (0.8 +
+              random.nextDouble() *
+                  0.4); // Valor final entre 80% e 120% do valor inicial
       valorFinalInvestimentos[investimento.id] = valorFinal;
       await atualizarValorFinalInvestimento(investimento.id, valorFinal);
     }
@@ -97,12 +99,15 @@ class InvestimentosController extends GetxController {
   Future<void> sortearValorFinal(Investimento investimento) async {
     final random = Random();
     final valorFinal = investimento.valor *
-        (0.8 + random.nextDouble() * 0.4); // Valor final entre 80% e 120% do valor inicial
+        (0.8 +
+            random.nextDouble() *
+                0.4); // Valor final entre 80% e 120% do valor inicial
     valorFinalInvestimentos[investimento.id] = valorFinal;
     await atualizarValorFinalInvestimento(investimento.id, valorFinal);
   }
 
-  Future<void> removerInvestimento(String investimentoId, double valorFinal) async {
+  Future<void> removerInvestimento(
+      String investimentoId, double valorFinal) async {
     final result = await _repo.removerInvestimento(investimentoId, valorFinal);
     result.match(
       (l) => QuickAlert.show(
@@ -139,7 +144,8 @@ class InvestimentosController extends GetxController {
   }
 
   Future<void> fecharInvestimentoHistorico(Investimento investimento) async {
-    final valorFinal = valorFinalInvestimentos[investimento.id] ?? investimento.valor;
+    final valorFinal =
+        valorFinalInvestimentos[investimento.id] ?? investimento.valor;
     await _repo.fecharInvestimentoHistorico(
       investimentoId: investimento.id,
       valorFinal: valorFinal,
@@ -172,20 +178,32 @@ class InvestimentosController extends GetxController {
               children: <Widget>[
                 TextField(
                   controller: tipoController,
-                  decoration: const InputDecoration(labelText: 'Tipo'),
+                  decoration: const InputDecoration(
+                    labelText: 'Tipo',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: valorController,
-                  decoration: const InputDecoration(labelText: 'Valor'),
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                ],
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d*\.?\d{0,2}')),
+                  ],
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: descricaoController,
-                  decoration: const InputDecoration(labelText: 'Descrição'),
+                  decoration: const InputDecoration(
+                    labelText: 'Descrição',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ],
             ),
