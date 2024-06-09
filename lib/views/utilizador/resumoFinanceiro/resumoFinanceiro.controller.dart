@@ -17,7 +17,9 @@ class ResumoFinanceiroController extends GetxController {
   final RxList<Saldo> saldos = <Saldo>[].obs;
   final RxList<Investimento> investimentos = <Investimento>[].obs;
   final RxList<Evento> eventos = <Evento>[].obs;
-  final RxString error = ''.obs;
+  final RxString mensagemSaldo = ''.obs;
+  final RxString mensagemInvestimentos = ''.obs;
+  final RxString mensagemDespesasPartilhadas = ''.obs;
   RxBool isLoading = RxBool(true);
   RxString storedUserId = "".obs;
 
@@ -33,13 +35,13 @@ class ResumoFinanceiroController extends GetxController {
       saldoRepository.carregarSaldos(storedUserId.value).then((result) {
         result.fold(
           (l) {
-            error.value = 'Nenhum saldo encontrado';
+            mensagemSaldo.value = 'Nenhum saldo encontrado';
           },
           (r) {
             if (r.isNotEmpty) {
               saldos.value = r.cast<Saldo>();
             } else {
-              error.value = 'Nenhum saldo encontrado';
+              mensagemSaldo.value = 'Nenhum saldo encontrado';
             }
           },
         );
@@ -50,13 +52,13 @@ class ResumoFinanceiroController extends GetxController {
           .then((result) {
         result.fold(
           (l) {
-            error.value = 'Nenhum investimento encontrado';
+            mensagemInvestimentos.value = 'Nenhum investimento encontrado';
           },
           (r) {
             if (r.isNotEmpty) {
               investimentos.value = r.cast<Investimento>();
             } else {
-              error.value = 'Nenhum investimento encontrado';
+              mensagemInvestimentos.value = 'Nenhum investimento encontrado';
             }
           },
         );
@@ -65,14 +67,14 @@ class ResumoFinanceiroController extends GetxController {
       eventoRepository.carregarEventos(storedUserId.value).then((result) {
         result.fold(
           (l) {
-            error.value = 'Nenhuma despesa partilhada encontrada';
+            mensagemDespesasPartilhadas.value = 'Nenhuma despesa partilhada encontrada';
           },
           (r) {
             if (r.isNotEmpty) {
               eventos.value =
                   r.where((evento) => evento.status).cast<Evento>().toList();
             } else {
-              error.value = 'Nenhuma despesa partilhada encontrada';
+              mensagemDespesasPartilhadas.value = 'Nenhuma despesa partilhada encontrada';
             }
           },
         );

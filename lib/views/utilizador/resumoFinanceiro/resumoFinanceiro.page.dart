@@ -28,8 +28,8 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                   const SizedBox(height: 10),
                   Obx(() => controller.saldos.isEmpty
                       ? Center(
-                          child: Text(controller.error.isNotEmpty
-                              ? controller.error.value
+                          child: Text(controller.mensagemSaldo.isNotEmpty
+                              ? controller.mensagemSaldo.value
                               : 'A carregar saldo...'))
                       : Card(
                           elevation: 4,
@@ -73,8 +73,8 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                   Obx(() => controller.investimentos.isEmpty
                       ? Center(
                           child: Text(
-                          controller.error.isNotEmpty
-                              ? controller.error.value
+                          controller.mensagemInvestimentos.isNotEmpty
+                              ? controller.mensagemInvestimentos.value
                               : 'A carregar investimentos...',
                           style: const TextStyle(fontSize: 14),
                         ))
@@ -119,8 +119,8 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                   Obx(() => controller.eventos.isEmpty
                       ? Center(
                           child: Text(
-                          controller.error.isNotEmpty
-                              ? controller.error.value
+                          controller.mensagemDespesasPartilhadas.isNotEmpty
+                              ? controller.mensagemDespesasPartilhadas.value
                               : 'A carregar despesas partilhadas...',
                           style: const TextStyle(fontSize: 14),
                         ))
