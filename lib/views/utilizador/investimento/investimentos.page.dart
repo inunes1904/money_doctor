@@ -47,8 +47,9 @@ class InvestimentosPage extends GetView<InvestimentosController> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ListTile(
-                            leading: const Icon(Icons.trending_up,
-                                color: Colors.green),
+                            leading: (valorFinal - investimento.valor >= 0) ? const Icon(Icons.trending_up,
+                                color: Colors.green) : const Icon(Icons.trending_down,
+                                color: Colors.red),
                             title: Text(
                               investimento.tipo,
                               style: const TextStyle(

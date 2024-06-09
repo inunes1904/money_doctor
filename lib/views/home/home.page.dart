@@ -15,67 +15,66 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBarPublic(),
       drawer: const SideMenu(),
-      body: Obx(() {
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Olá ${controller.storedUsername}! Aceda a uma das categorias",
-                  style: Theme.of(context).textTheme.headlineLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                if (controller.isLoading.value)
-                  // Enquanto carrega
-                  Expanded(
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: 20,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: deviceInfo.size.width > 700
-                            ? (deviceInfo.size.width > 1060 ? 6 : 4)
-                            : 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (ctx, index) {
-                        return Card(
-                          child: SizedBox(
-                            height: 180,
-                            child: Shimmer.fromColors(
-                              baseColor: GlobalColors.lightGrey,
-                              highlightColor: GlobalColors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 100,
-                                      color: GlobalColors.lightGrey,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Container(
-                                      height: 10,
-                                      color: GlobalColors.lightGrey,
-                                    ),
-                                  ],
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+        child: Obx(
+          () {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Olá ${controller.storedUsername}! Aceda a uma das categorias",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    if (controller.isLoading.value)
+                      // Enquanto carrega
+                      GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: 20,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: deviceInfo.size.width > 700
+                              ? (deviceInfo.size.width > 1060 ? 6 : 4)
+                              : 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (ctx, index) {
+                          return Card(
+                            child: SizedBox(
+                              height: 180,
+                              child: Shimmer.fromColors(
+                                baseColor: GlobalColors.lightGrey,
+                                highlightColor: GlobalColors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 100,
+                                        color: GlobalColors.lightGrey,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        height: 10,
+                                        color: GlobalColors.lightGrey,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                else // Depois de carregar conteúdo
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
+                          );
+                        },
+                      )
+                    else // Depois de carregar conteúdo
+                      Column(
                         children: [
                           GridView.builder(
                             shrinkWrap: true,
@@ -92,10 +91,11 @@ class HomePage extends GetView<HomeController> {
                             itemBuilder: (ctx, index) {
                               return InkWell(
                                 onTap: () {
-                                    // Só navega se tiver link
-                                    controller.opcoesMoneyApp[index].link != "" ?
-                                  Get.toNamed(
-                                      controller.opcoesMoneyApp[index].link): null;
+                                  // Só navega se tiver link
+                                  controller.opcoesMoneyApp[index].link != ""
+                                      ? Get.toNamed(
+                                          controller.opcoesMoneyApp[index].link)
+                                      : null;
                                 },
                                 child: Card(
                                   child: Padding(
@@ -203,13 +203,13 @@ class HomePage extends GetView<HomeController> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        );
-      }),
+                  ],
+                ),
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

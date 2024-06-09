@@ -135,7 +135,7 @@ class AnaliseInvestimentosPage extends GetView<AnaliseInvestimentosController> {
                                     const Spacer(),
                                     Text(
                                         historico?.dataRetirada != null
-                                            ? "Fechado"
+                                            ? "Encerrado"
                                             : "Aberto",
                                         style: const TextStyle(fontSize: 14)),
                                   ],
