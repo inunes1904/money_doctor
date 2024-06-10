@@ -72,17 +72,19 @@ class PartilhasPage extends GetView<PartilhasController> {
                                             .textTheme
                                             .headlineMedium!)),
                                 subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(
                                       height: 10.0,
                                     ),
                                     Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("Descrição: ",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headlineSmall!),
-                                        Text(evento.descricao),
+                                        const Text("Descrição: "),
+                                        Expanded(
+                                          child: Text(evento.descricao,
+                                              softWrap: true),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(

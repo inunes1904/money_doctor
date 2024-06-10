@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moneydoctor/routes/app_routes.dart';
 // import '../../../styles/global.colors.dart';
 import '../../../widgets/header/header.dart';
 import '../../../widgets/menu/side_menu.page.dart';
@@ -90,18 +91,20 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              child: ListTile(
-                                title: Text(
-                                  investimento.tipo,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              child: InkWell(
+                                onTap: () => Get.toNamed(AppRoutes.investimentos),
+                                child: ListTile(
+                                  title: Text(investimento.tipo,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                subtitle: Text(
-                                  '${investimento.valor.toStringAsFixed(2)} €',
-                                  style: const TextStyle(fontSize: 16),
+                                  subtitle: Text(
+                                    'Valor investido: ${investimento.valor.toStringAsFixed(2)} €',
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
                                 ),
                               ),
                             );
@@ -135,18 +138,19 @@ class ResumoFinanceiroPage extends GetView<ResumoFinanceiroController> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              child: ListTile(
-                                title: Text(
-                                  evento.nome,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              child: InkWell(
+                                onTap: () => Get.toNamed(AppRoutes.detalhesPartilhas, arguments: evento),
+                                child: ListTile(
+                                  title: Text(evento.nome,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                subtitle: Text(
-                                  evento.descricao,
-                                  style: const TextStyle(fontSize: 16),
+                                  subtitle: Text("Descrição: ${evento.descricao}",
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
                                 ),
                               ),
                             );
