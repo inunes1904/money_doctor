@@ -63,11 +63,11 @@ class AppTheme {
       labelStyle: TextStyle(color: GlobalColors.navbarColor),
       unselectedLabelColor: GlobalColors.darkgrey,
       unselectedLabelStyle: TextStyle(color: GlobalColors.darkgrey),
-      labelColor: GlobalColors.primaryColor, // Adjusted to match pearl theme
+      labelColor: GlobalColors.primaryColor,
       labelPadding: EdgeInsets.symmetric(vertical: 12),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: GlobalColors.primaryColor, // Adjusted to match pearl theme
+        backgroundColor: GlobalColors.primaryColor,
         shape: CircleBorder()),
     iconTheme: const IconThemeData(
       color: GlobalColors.grey,
@@ -169,7 +169,7 @@ class AppTheme {
       onSecondary: GlobalColors.white,
       onSurface: GlobalColors.darkgrey, // icons
       error: GlobalColors.dangerColor,
-      primary: GlobalColors.primaryColor, // Adjusted to match pearl theme
+      primary: GlobalColors.primaryColor,
       primaryContainer: GlobalColors.mainColor,
       secondary: GlobalColors.secondaryColor,
       secondaryContainer: GlobalColors.darkgrey,
